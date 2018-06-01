@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 基于DAO接口创建映射文件 -->
+<mapper namespace="com.jt.sys.dao.SysRoleDao">
+	<select id="findPageObjects" resultType="sysRole">
+		select * from sys_roles
+	</select>
+	<insert id="insertObject" parameterType="sysRole">
+		insert into sys_roles(id,name,note,createdTime,modifiedTime,createdUser,modifiedUser) values(null,#{name},#{note},now(),now(),#{createdUser},#{modifiedUser})
+	</insert>
+	<update id="updateObject" parameterType="sysRole">
+		update sys_roles set name=#{name},note=#{note},createdTime=now(),modifiedTime=now(),createdUser=#{createdUser},modifiedUser=#{modifiedUser} where id=#{id}
+	</update>
+	<select id="findObjectById" resultType="sysRole">
+		select * from sys_roles where id=#{id}
+	</select>
+	<delete id="deleteObject" parameterType="integer">
+		delete from sys_roles where id in
+		<foreach collection="ids" open="(" close=")" separator="," item="item">
+			#{item}
+		</foreach>
+	</delete>
+</mapper>
