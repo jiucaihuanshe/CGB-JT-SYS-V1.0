@@ -39,5 +39,10 @@ public class SysRoleServiceImpl implements SysRoleService{
 		int rows = sysRoleDao.deleteObject(ids);
 		return rows;
 	}
+	@Override
+	public List<SysRole> findPageObject() {
+		List<SysRole> list = sysRoleDao.findPageObjects();
+		return list;
+	}
 
 }

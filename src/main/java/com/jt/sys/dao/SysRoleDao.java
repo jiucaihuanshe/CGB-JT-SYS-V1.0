@@ -17,4 +17,7 @@ public interface SysRoleDao {
 	SysRole findObjectById(Integer id);
 	//根据id删除角色数据
 	int deleteObject(@Param("ids") String[] ids);
+	
+	//AJAX访问所有角色信息
+	List<SysRole> findPageObject();
 }

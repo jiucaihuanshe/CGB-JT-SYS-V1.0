@@ -42,9 +42,9 @@ public class SysRoleController {
 	@RequestMapping("doUpdateObject")
 	@ResponseBody
 	public int doUpdateObject(SysRole entity){
-		entity.setName("dai");
-		entity.setNote("teacher");
-		entity.setCreatedUser("xia");
+		entity.setName("jun");
+		entity.setNote("student");
+		entity.setCreatedUser("tom");
 		entity.setModifiedUser("xia");
 		entity.setId(3);
 		int rows = sysRoleService.updateObject(entity);
