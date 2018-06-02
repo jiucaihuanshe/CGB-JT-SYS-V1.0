@@ -33,7 +33,11 @@ public class AjaxController {
 	@RequestMapping("listUI0")
 	public String listUI(){
 		System.out.println("listUI0()");
-		return "sys/rolesPOST";
+		return "sys/role_list";
+	}
+	@RequestMapping("mainUI")
+	public String mainUI(){
+		return "sys/main";
 	}
 	/*@RequestMapping("doFindPageObject")
 	public ModelAndView doFindPageObject(){
@@ -52,5 +56,10 @@ public class AjaxController {
 		System.out.println("pageCurrent="+pageCurrent);
 		List<SysRole> list = sysRoleService.findPageObject();
 		return list;
+	}
+	
+	@RequestMapping("rightfile")
+	public String rightfile(){
+		return "right";
 	}
 }
