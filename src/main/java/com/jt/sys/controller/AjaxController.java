@@ -4,9 +4,12 @@ package com.jt.sys.controller;
  */
 import java.util.List;
 
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,7 +25,17 @@ public class AjaxController {
 	 * 返回一个新的页面，全局刷新
 	 * 终端
 	 */
-	@RequestMapping("doFindPageObject")
+	private ClassPathXmlApplicationContext ctx;
+	@Before
+	public void init(){
+		ctx = new ClassPathXmlApplicationContext("spring-configs.xml");
+	}
+	@RequestMapping("listUI0")
+	public String listUI(){
+		System.out.println("listUI0()");
+		return "sys/rolesPOST";
+	}
+	/*@RequestMapping("doFindPageObject")
 	public ModelAndView doFindPageObject(){
 		List<SysRole> list = sysRoleService.findPageObject();
 		//ModelAndView构造方法
@@ -32,5 +45,12 @@ public class AjaxController {
 		//返回指定页面
 		mv.setViewName("sys/roles");
 		return mv;
+	}*/
+	@RequestMapping("doFindPageObject")
+	@ResponseBody
+	public List<SysRole> doFindPageObject(@RequestParam("pageCurrent") Integer pageCurrent){
+		System.out.println("pageCurrent="+pageCurrent);
+		List<SysRole> list = sysRoleService.findPageObject();
+		return list;
 	}
 }

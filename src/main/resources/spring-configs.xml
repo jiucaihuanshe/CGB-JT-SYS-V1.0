@@ -34,7 +34,7 @@
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- 自动给后面action的方法return的字符串加上前缀和后缀，变成一个可用的url地址 -->
 		<property name="prefix" value="/WEB-INF/pages/"/>
-		<property name="suffix" value=".jsp"/>
+		<property name="suffix" value=".html"/>
 	</bean>
 	<!-- 配置DRUID -->
 	<!-- 加载properties文件 -->
