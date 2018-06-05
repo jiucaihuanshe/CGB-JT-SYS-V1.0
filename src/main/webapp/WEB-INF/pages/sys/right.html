@@ -32,6 +32,7 @@
 							<th>modifiedTime</th>
 							<th>createdUser</th>
 							<th>modifiedUser</th>
+							<th>operator</th>
 						</tr>
 					</thead>
 					<tbody id="tabBodyId">
@@ -132,6 +133,7 @@
 		//迭代data
 		for ( var i in data) {
 			var tr = $("<tr></tr>");//构建tr对象
+			tr.data("id",data[i].id);
 			tr.append("<td><input type='checkbox' name='checkedId' value='"+data[i].id+"'/></td>");
 			tr.append("<td>" + data[i].name + "</td>");
 			tr.append("<td>" + data[i].note + "</td>");
@@ -139,8 +141,18 @@
 			tr.append("<td>" + data[i].modifiedTime + "</td>");
 			tr.append("<td>" + data[i].createdUser + "</td>");
 			tr.append("<td>" + data[i].modifiedUser + "</td>");
+			tr.append("<td><button type='button' class='btn btn-primary' onClick='doDelete(this)''>删除</button></td>");
 			//将tr追加到tbody
 			tBody.append(tr);
 		}
+	}
+	function doDelete(obj){
+		var id =$(obj).parent().parent().data("id");
+		var url = "role/doDeleteObject.do";
+		var params={"checkedIds":id};
+		$.post(url,params,function(result){
+			alert(result);
+			doGetObject();
+		});
 	}
 </script>
