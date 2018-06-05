@@ -35,7 +35,7 @@ public class RoleController {
 	@RequestMapping("listUI")
 	public String listUI(){
 		System.out.println("listUI()");
-		return "sys/roles";
+		return "sys/roles2";
 	}
 	@RequestMapping("doTestJackson")
 	@ResponseBody

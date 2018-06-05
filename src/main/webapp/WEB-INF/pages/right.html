@@ -1,44 +1,105 @@
-<table border="1" cellpadding="1" cellspacing="1">
-	<thead>
-		<tr>
-			<th>id</th>
-			<th>name</th>
-			<th>note</th>
-		</tr>
-	</thead>
-	<thead id="tabBodyId">
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">Responsive Hover Table</h3>
 
-	</thead>
-</table>
+				<div class="box-tools">
+					<div class="input-group input-group-sm" style="width: 150px;">
+						<input type="text" name="table_search"
+							class="form-control pull-right" placeholder="Search">
+
+						<div class="input-group-btn">
+							<button type="submit" class="btn btn-default">
+								<i class="fa fa-search"></i>
+							</button>
+							<button type="button" class="btn btn-default btn-delete">删除</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body table-responsive no-padding">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>id</th>
+							<th>name</th>
+							<th>note</th>
+							<th>createdTime</th>
+							<th>modifiedTime</th>
+							<th>createdUser</th>
+							<th>modifiedUser</th>
+						</tr>
+					</thead>
+					<thead id="tabBodyId">
+
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
 <script type="text/javascript">
-	$(function(){
+	$(function() {
+		//页面加载完成以后，异步加载角色信息
 		doGetObject();
-	})
-	function doGetObject(){
+		$(".input-group-btn").on("click",".btn-delete",doDeleteObject);
+	});
+	//实现角色的删除操作
+	function doDeleteObject(){
+		//1.获取选中的角色id(不定项)
+		var checkdIds=getCheckedIds();
+		console.log(checkdIds);
+		//2.将这些id值异步传输到服务端，执行删除操作
+		//$.post(url,params,function(result)){}
+	}
+	function getCheckedIds(){
+		var checkedIds="";
+		//获取所有tbody中名字为checkedId的input元素，迭代这些input元素
+		$("tbody input[name='checkedId']").each(function(){
+			if($(this).prop("checked")){
+				//假如这个input的checked属性值为true
+				if(checkedIds.length==0){
+					checkedIds+=$(this).val();
+				}else{
+					checkedIds+=","+$(this).val();
+				}
+			}
+		});
+		return checkedIds;
+	}
+	function doGetObject() {
 		//jquery提供的ajax函数
 		$.ajax({
-			url:"role/doFindPageObject.do",
-			dataType:"json",//期望的返回的数据格式
-			data:{"pageCurrent":1},//提交的数据
-			success:function(result){//服务端响应ok回调此函数
+			url : "role/doFindPageObject.do",
+			dataType : "json",//期望的返回的数据格式
+			data : {
+				"pageCurrent" : 1
+			},//提交的数据
+			success : function(result) {//服务端响应ok回调此函数
 				doSetTableBody(result);//result用于接收服务端返回的数据。
 			},
-			error:function(result){//服务端响应失败
+			error : function(result) {//服务端响应失败
 				console.log(result);
 			},
 			//数据是否需要缓冲，false不缓存
-			cache:false 
+			cache : false
 		});
 	}
-	function doSetTableBody(data){
+	function doSetTableBody(data) {
 		//console.log(data);//array
-		var tBody=$("#tabBodyId");
+		var tBody = $("#tabBodyId");
 		//迭代data
-		for(var i in data){
-			var tr =$("<tr></tr>");//构建tr对象
-			tr.append("<td>"+data[i].id+"</td>");
-			tr.append("<td>"+data[i].name+"</td>");
-			tr.append("<td>"+data[i].note+"</td>");+
+		for ( var i in data) {
+			var tr = $("<tr></tr>");//构建tr对象
+			tr.append("<td><input type='checkbox' name='checkedId' value='"+data[i].id+"'/></td>");
+			tr.append("<td>" + data[i].name + "</td>");
+			tr.append("<td>" + data[i].note + "</td>");
+			tr.append("<td>" + data[i].createdTime + "</td>");
+			tr.append("<td>" + data[i].modifiedTime + "</td>");
+			tr.append("<td>" + data[i].createdUser + "</td>");
+			tr.append("<td>" + data[i].modifiedUser + "</td>");
 			//将tr追加到tbody
 			tBody.append(tr);
 		}

@@ -1,7 +1,11 @@
 package com.jt.sys.pojo;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.jt.common.DateJsonSerializer;
 
 public class SysRole implements Serializable{
 	private static final long serialVersionUID = -5225339701513043662L;
@@ -30,12 +34,18 @@ public class SysRole implements Serializable{
 	public void setNote(String note) {
 		this.note = note;
 	}
+	/*public String getCreatedTime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return sdf.format(createdTime);
+	}*/
+	@JsonSerialize(using=DateJsonSerializer.class)
 	public Date getCreatedTime() {
 		return createdTime;
 	}
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
 	}
+	@JsonSerialize(using=DateJsonSerializer.class)
 	public Date getModifiedTime() {
 		return modifiedTime;
 	}
