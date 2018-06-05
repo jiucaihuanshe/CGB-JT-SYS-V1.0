@@ -30,38 +30,25 @@ public class SysRoleController {
 	}
 	@RequestMapping("doInsertObject")
 	@ResponseBody
-	public int doInsertObject(SysRole entity){
-		entity.setName("xue");
-		entity.setNote("student");
-		entity.setCreatedUser("tom");
-		entity.setModifiedUser("tom");
-		int rows = sysRoleService.insertObject(entity);
-		System.out.println("rows="+rows);
-		return rows;
+	public String doInsertObject(SysRole entity){
+		sysRoleService.insertObject(entity);
+		return "insert ok";
 	}
 	@RequestMapping("doUpdateObject")
 	@ResponseBody
-	public int doUpdateObject(SysRole entity){
-		entity.setName("jun");
-		entity.setNote("student");
-		entity.setCreatedUser("tom");
-		entity.setModifiedUser("xia");
-		entity.setId(3);
-		int rows = sysRoleService.updateObject(entity);
-		return rows;
+	public String doUpdateObject(SysRole entity){
+		sysRoleService.updateObject(entity);
+		return "update ok";
 	}
 	@RequestMapping("doFindObjectById")
 	@ResponseBody
-	public SysRole doFindObjectById(SysRole entity){
-		SysRole ids = sysRoleService.findObjectById(3);
-		System.out.println(ids);
-		return ids;
+	public SysRole doFindObjectById(Integer id){
+		return sysRoleService.findObjectById(id);
 	}
 	@RequestMapping("doDeleteObject")
 	@ResponseBody
-	public int doDeleteObject(){
-		String[] ids = {"3","4"};
-		int rows = sysRoleService.deleteObject(ids);
-		return rows;
+	public String doDeleteObject(String checkedIds){
+		sysRoleService.deleteObject(checkedIds);
+		return "delect ok";
 	}
 }

@@ -11,7 +11,7 @@ public interface SysRoleService {
 	int insertObject(SysRole entity);
 	int updateObject(SysRole entity);
 	SysRole findObjectById(Integer id);
-	int deleteObject(String[] ids);
+	int deleteObject(String ids);
 	
 	List<SysRole> findPageObject();
 }

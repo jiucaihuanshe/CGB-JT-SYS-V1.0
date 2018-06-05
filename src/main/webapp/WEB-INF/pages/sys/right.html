@@ -5,7 +5,7 @@
 				<h3 class="box-title">Responsive Hover Table</h3>
 
 				<div class="box-tools">
-					<div class="input-group input-group-sm" style="width: 150px;">
+					<div class="input-group input-group-sm" style="width: 350px;">
 						<input type="text" name="table_search"
 							class="form-control pull-right" placeholder="Search">
 
@@ -14,6 +14,8 @@
 								<i class="fa fa-search"></i>
 							</button>
 							<button type="button" class="btn btn-default btn-delete">删除</button>
+							<button type="button" class="btn btn-default btn-add">添加</button>
+							<button type="button" class="btn btn-default btn-update">修改</button>
 						</div>
 					</div>
 				</div>
@@ -32,9 +34,9 @@
 							<th>modifiedUser</th>
 						</tr>
 					</thead>
-					<thead id="tabBodyId">
+					<tbody id="tabBodyId">
 
-					</thead>
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -44,28 +46,63 @@
 	$(function() {
 		//页面加载完成以后，异步加载角色信息
 		doGetObject();
-		$(".input-group-btn").on("click",".btn-delete",doDeleteObject);
+		$(".input-group-btn").on("click",".btn-delete",doDeleteObject)
+		.on("click",".btn-add,.btn-update",doLoadEditPage);
 	});
+	function doLoadEditPage(){
+		var title;
+		if($(this).hasClass("btn-add")){
+			title="添加角色";
+		}else{
+			title="修改角色";
+			var ids=getCheckedIds();//返回的是一个数组
+			if(ids.length!=1){
+				alert("需要选择一个");
+				return;
+			}
+			//绑定数据，目的：在编辑页面可以获取此值，因为修改时需要根据此查询
+			$(".container-fluid").data("id",ids[0]);
+		}
+		$(".container-fluid").load("role/addfile.do",function(){
+			$(".box-title").html(title);
+		});
+	}
 	//实现角色的删除操作
 	function doDeleteObject(){
 		//1.获取选中的角色id(不定项)
-		var checkdIds=getCheckedIds();
-		console.log(checkdIds);
+		var checkedIds = getCheckedIds();
+		//console.log(checkedIds);
+		if(checkedIds.length==0){
+			alert("请选择一个");
+			return;
+		}
 		//2.将这些id值异步传输到服务端，执行删除操作
-		//$.post(url,params,function(result)){}
+		var url="role/doDeleteObject.do";
+		var params={"checkedIds":checkedIds.toString()};//为什么写toString()，因为Controller端接收的数据为String，而获取的id值是一个数组，所以需要进行转换。
+		$.post(url,params,function(result){
+			alert(result);
+			doGetObject();//删除后，刷新页面
+		});
 	}
+
 	function getCheckedIds(){
-		var checkedIds="";
+		var checkedIds=[];
 		//获取所有tbody中名字为checkedId的input元素，迭代这些input元素
 		$("tbody input[name='checkedId']").each(function(){
 			if($(this).prop("checked")){
+				checkedIds.push($(this).val());
+			}
+			
+			
+			
+			/* if($(this).prop("checked")){
 				//假如这个input的checked属性值为true
 				if(checkedIds.length==0){
 					checkedIds+=$(this).val();
 				}else{
 					checkedIds+=","+$(this).val();
 				}
-			}
+			} */
 		});
 		return checkedIds;
 	}
@@ -90,6 +127,8 @@
 	function doSetTableBody(data) {
 		//console.log(data);//array
 		var tBody = $("#tabBodyId");
+		//清空原有数据
+		tBody.empty();
 		//迭代data
 		for ( var i in data) {
 			var tr = $("<tr></tr>");//构建tr对象

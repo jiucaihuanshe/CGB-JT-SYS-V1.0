@@ -1,0 +1,89 @@
+<div class="box box-info">
+	<div class="box-header with-border">
+		<h3 class="box-title">添加角色</h3>
+	</div>
+	<!-- /.box-header -->
+	<!-- form start -->
+	<form class="form-horizontal">
+		<div class="box-body">
+			<div class="form-group">
+				<label for="nameId" class="col-sm-2 control-label">姓名</label>
+
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="nameId" name="name"
+						placeholder="姓名">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="noteId" class="col-sm-2 control-label">描述</label>
+
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="noteId" name="note"
+						placeholder="描述">
+				</div>
+			</div>
+		</div>
+		<!-- /.box-body -->
+		<div class="box-footer">
+			<button type="button" class="btn btn-default btn-cancel">Cancel</button>
+			<button type="button" class="btn btn-info pull-right btn-save">Save</button>
+		</div>
+		<!-- /.box-footer -->
+	</form>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$(".box-footer").on("click",".btn-cancel",doCancel)
+		.on("click",".btn-save",doSaveOrUpdate);
+		var id=$(".container-fluid").data("id");
+		//假如id有值，则说明是更新，根据此id查询
+		if(id){
+			doFindObjectById(id);
+		}
+	});
+	//根据id查找角色对象
+	function doFindObjectById(id){
+		var url="role/doFindObjectById.do";
+		var params={"id":id};
+		$.getJSON(url,params,function(result){
+			doInitEditForm(result);
+		});
+	}
+	//初始化表单页面
+	function doInitEditForm(result){
+		$("#nameId").val(result.name);
+		$("#noteId").val(result.note);
+	}
+	function doCancel(){
+		$(".container-fluid").load("role/rightfile.do");
+		//移除绑定的id值
+		$(".container-fluid").removeData("id");
+	}
+	function doSaveOrUpdate(){
+		//1.获取表单数据
+		var params=getFormData();
+		//2.把数据异步提交到服务器
+		var id = $(".container-fluid").data("id");
+		if(id){
+			params.id=id;
+		}
+		var updateurl="role/doUpdateObject.do";
+		var inserturl="role/doInsertObject.do";
+		var url=id?updateurl:inserturl;
+		$.post(url,params,function(result){
+			alert(result);
+			//退出当前页面
+			doCancel();
+		});
+	}
+	//获取表单数据
+	function getFormData(){
+		//为什么写name,因为还有另一种取值方法。可以通过如下方法获取表单数据,
+    	//但表单对应的元素必须有name属性  $(".form-horizontal").serialize();
+		var params={
+				"name":$("#nameId").val(),
+				"note":$("#noteId").val()
+		};
+		return params;
+	}
+</script>

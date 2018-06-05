@@ -33,12 +33,30 @@ public class AjaxController {
 	@RequestMapping("listUI0")
 	public String listUI(){
 		System.out.println("listUI0()");
-		return "sys/role_list";
+		return "sys/role_list2";
 	}
 	@RequestMapping("mainUI")
 	public String mainUI(){
 		return "sys/main";
 	}
+	
+	@RequestMapping("doFindPageObject")
+	@ResponseBody
+	public List<SysRole> doFindPageObject(@RequestParam("pageCurrent") Integer pageCurrent){
+		System.out.println("pageCurrent="+pageCurrent);
+		List<SysRole> list = sysRoleService.findPageObject();
+		return list;
+	}
+	
+	@RequestMapping("rightfile")
+	public String rightfile(){
+		return "sys/right";
+	}
+	@RequestMapping("addfile")
+	public String addfile(){
+		return "sys/role_edit";
+	}
+	
 	/*@RequestMapping("doFindPageObject")
 	public ModelAndView doFindPageObject(){
 		List<SysRole> list = sysRoleService.findPageObject();
@@ -50,16 +68,4 @@ public class AjaxController {
 		mv.setViewName("sys/roles");
 		return mv;
 	}*/
-	@RequestMapping("doFindPageObject")
-	@ResponseBody
-	public List<SysRole> doFindPageObject(@RequestParam("pageCurrent") Integer pageCurrent){
-		System.out.println("pageCurrent="+pageCurrent);
-		List<SysRole> list = sysRoleService.findPageObject();
-		return list;
-	}
-	
-	@RequestMapping("rightfile")
-	public String rightfile(){
-		return "right";
-	}
 }
