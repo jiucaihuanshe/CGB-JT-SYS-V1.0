@@ -405,7 +405,9 @@ desired effect
 			//console.log("page load ok")
 			$("#load-role-id").click(function(){
 				/* 异步加载(底层发送ajax请求) */
-				$(".container-fluid").load("role/rightfile.do");
+				$(".container-fluid").load("role/rightfile.do",function(){
+					$(".container-fluid").removeData("id");
+				});
 			});
 		});
 </script>

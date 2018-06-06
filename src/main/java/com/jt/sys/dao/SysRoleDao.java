@@ -8,6 +8,7 @@ import com.jt.sys.pojo.SysRole;
 //数据持久层对象
 public interface SysRoleDao {
 	//查询所有角色信息
+	
 	List<SysRole> findPageObjects();
 	//向表中写入数据
 	int insertObject(SysRole entity);
@@ -19,5 +20,6 @@ public interface SysRoleDao {
 	int deleteObject(@Param("ids") String[] ids);
 	
 	//AJAX访问所有角色信息
-	List<SysRole> findPageObject();
+	//对指定名称，进行查询，对实现方法进行重用，运用动态sql技术
+	List<SysRole> findPageObject(@Param("name") String name);
 }

@@ -13,5 +13,5 @@ public interface SysRoleService {
 	SysRole findObjectById(Integer id);
 	int deleteObject(String ids);
 	
-	List<SysRole> findPageObject();
+	List<SysRole> findPageObject(String name);
 }

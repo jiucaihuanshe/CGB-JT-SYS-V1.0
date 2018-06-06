@@ -10,7 +10,7 @@
 		insert into sys_roles(id,name,note,createdTime,modifiedTime,createdUser,modifiedUser) values(null,#{name},#{note},now(),now(),#{createdUser},#{modifiedUser})
 	</insert>
 	<update id="updateObject" parameterType="sysRole">
-		update sys_roles set name=#{name},note=#{note},createdTime=now(),modifiedTime=now(),createdUser=#{createdUser},modifiedUser=#{modifiedUser} where id=#{id}
+		update sys_roles set name=#{name},note=#{note},modifiedTime=now(),modifiedUser=#{modifiedUser} where id=#{id}
 	</update>
 	<select id="findObjectById" resultType="sysRole">
 		select * from sys_roles where id=#{id}
@@ -21,4 +21,13 @@
 			#{item}
 		</foreach>
 	</delete>
+	<select id="findPageObject" resultType="sysRole">
+		select * from sys_roles
+		<where>
+			<if test="name!=null and name!=''">
+				name like concat("%",#{name},"%")
+			</if>
+		</where>
+		order by createdTime desc
+	</select>
 </mapper>

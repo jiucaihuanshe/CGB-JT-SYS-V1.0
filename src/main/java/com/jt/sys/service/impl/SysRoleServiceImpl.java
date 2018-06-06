@@ -53,8 +53,8 @@ public class SysRoleServiceImpl implements SysRoleService{
 		return sysRoleDao.deleteObject(checkedIds);
 	}
 	@Override
-	public List<SysRole> findPageObject() {
-		List<SysRole> list = sysRoleDao.findPageObjects();
+	public List<SysRole> findPageObject(String name) {
+		List<SysRole> list = sysRoleDao.findPageObject(name);
 		return list;
 	}
 

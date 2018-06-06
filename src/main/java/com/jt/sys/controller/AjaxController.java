@@ -42,9 +42,9 @@ public class AjaxController {
 	
 	@RequestMapping("doFindPageObject")
 	@ResponseBody
-	public List<SysRole> doFindPageObject(@RequestParam("pageCurrent") Integer pageCurrent){
+	public List<SysRole> doFindPageObject(@RequestParam("pageCurrent") Integer pageCurrent,String name){
 		System.out.println("pageCurrent="+pageCurrent);
-		List<SysRole> list = sysRoleService.findPageObject();
+		List<SysRole> list = sysRoleService.findPageObject(name);
 		return list;
 	}
 	
