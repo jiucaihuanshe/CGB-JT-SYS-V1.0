@@ -1,0 +1,80 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">用户管理</h3>
+
+				<div class="box-tools">
+					<div class="input-group input-group-sm" style="width: 350px;">
+						<input type="text" name="table_search"  id="searchNameId"
+							class="form-control pull-right" placeholder="Search">
+
+						<div class="input-group-btn">
+							<button type="submit" class="btn btn-default">
+								<i class="fa fa-search"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.box-header   -success绿色 -warning橙色 -primary蓝色 -danger红色-->
+			<div class="box-body table-responsive no-padding">
+				<table class="table table-hover">
+					<tr>
+						<th>ID</th>
+						<th>Username</th>
+						<th>Password</th>
+						<th>Salt</th>
+						<th>Email</th>
+						<th>Mobile</th>
+						<th>Valid</th>
+						<th>CreatedTime</th>
+						<th>ModifiedTime</th>
+						<th>CreatedUser</th>
+						<th>ModifiedUser</th>
+					</tr>
+					<tbody id="tabBodyId">
+					
+					</tbody>
+				</table>
+			</div>
+			<!-- /.box-body -->
+		</div>
+		<!-- /.box -->
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		doGetObject();
+	});
+	//加载用户信息
+	function doGetObject(){
+		var url="role/findUserObject.do";
+		var params={"pageCurrent":1};
+		params.username=$("#searchNameId").val();
+		$.getJSON(url,params,function(result){
+			//将服务器返回的数据填充到表格中
+			console.log(result);
+			setTableBodyRows(result.userrecords);
+		});
+	}
+	function setTableBodyRows(result){
+		var tBody=$("#tabBodyId");
+		for(var i in result){
+			var tr=$("<tr></tr>");
+			var tds = "<td>"+result[i].id+"</td>"+
+			"<td>"+result[i].username+"</td>"+
+			"<td>"+result[i].password+"</td>"+
+			"<td>"+result[i].salt+"</td>"+
+			"<td>"+result[i].email+"</td>"+
+			"<td>"+result[i].mobile+"</td>"+
+			"<td>"+result[i].valid+"</td>"+
+			"<td>"+result[i].createdTime+"</td>"+
+			"<td>"+result[i].modifiedTime+"</td>"+
+			"<td>"+result[i].createdUser+"</td>"+
+			"<td>"+result[i].modifiedUser+"</td>";
+			tr.append(tds);
+			tBody.append(tr);
+		}
+	}
+</script>

@@ -269,10 +269,8 @@ desired effect
               </span>
           </a>
           <ul class="treeview-menu">
-          	<li><a href="#">组织管理</a></li>
-          	<li><a href="#">菜单管理</a></li>
             <li><a id="load-role-id">角色管理</a></li>
-            <li><a href="#">用户管理</a></li>
+            <li><a id="load-user-id">用户管理</a></li>
           </ul>
         </li>
       </ul>
@@ -408,6 +406,9 @@ desired effect
 				$(".container-fluid").load("role/rightfile.do",function(){
 					$(".container-fluid").removeData("id");
 				});
+			});
+			$("#load-user-id").click(function(){
+				$(".container-fluid").load("role/userfile.do");
 			});
 		});
 </script>
