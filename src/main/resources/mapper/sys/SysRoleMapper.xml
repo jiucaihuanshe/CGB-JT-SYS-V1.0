@@ -3,6 +3,14 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 基于DAO接口创建映射文件 -->
 <mapper namespace="com.jt.sys.dao.SysRoleDao">
+	<!-- sql提取公用代码 include包含 -->
+	<sql id="whereSqlId">
+		<where>
+			<if test="name!=null and name!=''">
+				name like concat("%",#{name},"%")
+			</if>
+		</where>
+	</sql>
 	<select id="findPageObjects" resultType="sysRole">
 		select * from sys_roles
 	</select>
@@ -21,13 +29,18 @@
 			#{item}
 		</foreach>
 	</delete>
+	<!-- 查询当前页记录 -->
 	<select id="findPageObject" resultType="sysRole">
 		select * from sys_roles
-		<where>
-			<if test="name!=null and name!=''">
-				name like concat("%",#{name},"%")
-			</if>
-		</where>
+		<include refid="whereSqlId"/>
 		order by createdTime desc
+		limit #{startIndex},#{pageSize}
+	</select>
+	<!-- 统计记录数(要根据总记录数计算总页数)
+	返回值类型。只要是select，resultType和resultMap必须要有一个，insert和update都不用写。
+	以后查询的话，也是需要分页的。统计的话，已name查询统计。-->
+	<select id="getRowCount" resultType="int">
+		select count(*) from sys_roles
+		<include refid="whereSqlId"/>
 	</select>
 </mapper>

@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jt.common.vo.PageObject;
 import com.jt.sys.dao.SysRoleDao;
 import com.jt.sys.pojo.SysRole;
 import com.jt.sys.service.SysRoleService;
@@ -57,5 +58,26 @@ public class SysRoleServiceImpl implements SysRoleService{
 		List<SysRole> list = sysRoleDao.findPageObject(name);
 		return list;
 	}
-
+	@Override
+	public PageObject findPageObject(Integer pageCurrent, String name) {
+		//1.获取当前页数据
+		int pageSize=3;//每页3条数据，>0	>3	>6
+		int startIndex=(pageCurrent-1)*pageSize;
+		//startIndex 查询的起始位置
+		List<SysRole> list = sysRoleDao.findPageObject(name, startIndex, pageSize);
+		//2.获取总记录数,计算总页数
+		int rowCount=sysRoleDao.getRowCount(name);
+		int pageCount=rowCount/pageSize;
+		//为了求余是否为0，不等于0，总页数要往后+1
+		if(rowCount%pageSize!=0){
+			pageCount++;
+		}
+		//3.封装数据(封装到PageObject)
+		PageObject pageObject = new PageObject();
+		pageObject.setRecords(list);
+		pageObject.setRowCount(rowCount);
+		pageObject.setPageCount(pageCount);
+		pageObject.setPageCurrent(pageCurrent);
+		return pageObject;
+	}
 }

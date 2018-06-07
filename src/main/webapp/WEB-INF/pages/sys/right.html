@@ -6,11 +6,13 @@
 
 				<div class="box-tools">
 					<div class="input-group input-group-sm" style="width: 350px;">
-						<input type="text" name="table_search" id="searchNameId" onkeyup="searchenter1(event);"
-							class="form-control pull-right" placeholder="名称">
+						<input type="text" name="table_search" id="searchNameId"
+							onkeyup="searchenter1(event);" class="form-control pull-right"
+							placeholder="名称">
 
 						<div class="input-group-btn">
-							<button type="button" class="btn btn-default btn-search" id="searchId">
+							<button type="button" class="btn btn-default btn-search"
+								id="searchId">
 								<i class="fa fa-search"></i>
 							</button>
 							<button type="button" class="btn btn-default btn-delete">删除</button>
@@ -25,7 +27,8 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th><input type="checkbox" id="all" name="selectall" onclick="checkAll()"/>全选</th>
+							<th><input type="checkbox" id="all" name="selectall"
+								onclick="checkAll()" />全选</th>
 							<th>name</th>
 							<th>note</th>
 							<th>createdTime</th>
@@ -39,18 +42,18 @@
 
 					</tbody>
 				</table>
-				<!-- /.box-body -->
-	            <div id="pageId" class="box-footer clearfix">
-	              <ul class="pagination pagination-sm no-margin pull-right">
-	                <li><a class="first">首页</a></li>
-	                <li><a class="pre">上一页</a></li>
-	                <li><a class="next">下一页</a></li>
-	                <li><a class="last">尾页</a></li>
-	                <li><a class="rowCount">总记录数(3)</a></li>
-	                <li><a class="pageCount">总页数(3)</a></li>
-	                <li><a class="pageCurrent">当前页(1)</a></li>
-	              </ul>
-	            </div>
+			</div>
+			<!-- /.box-body -->
+			<div id="pageId" class="box-footer clearfix">
+				<ul class="pagination pagination-sm no-margin pull-right">
+					<li><a class="first">首页</a></li>
+					<li><a class="pre">上一页</a></li>
+					<li><a class="next">下一页</a></li>
+					<li><a class="last">尾页</a></li>
+					<li><a class="rowCount">总记录数(3)</a></li>
+					<li><a class="pageCount">总页数(3)</a></li>
+					<li><a class="pageCurrent">当前页(1)</a></li>
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -59,107 +62,147 @@
 	$(function() {
 		//页面加载完成以后，异步加载角色信息
 		doGetObject();
-		$(".input-group-btn").on("click",".btn-delete",doDeleteObject)
-		.on("click",".btn-add,.btn-update",doLoadEditPage)
-		.on("click",".btn-search",doQueryObject);
+		$(".input-group-btn").on("click", ".btn-delete", doDeleteObject).on(
+				"click", ".btn-add,.btn-update", doLoadEditPage).on("click",
+				".btn-search", doQueryObject);
+		$("#pageId").on("click",".first,.pre,.next,.last",doJumpToPage);
 	});
+	/**初始化分页信息*/
+	function setPagination(pageObject){
+		$(".rowCount").html("总记录数("+pageObject.rowCount+")");
+		$(".pageCount").html("总页数("+pageObject.pageCount+")");
+		$(".pageCurrent").html("当前页("+pageObject.pageCurrent+")");
+		//给pageId绑定值，在一个div上存取数据
+		$("#pageId").data("pageCurrent",pageObject.pageCurrent);
+		$("#pageId").data("pageCount",pageObject.pageCount);
+	}
+	//跳转到某个页面
+	function doJumpToPage(){
+		var pageCurrent=$("#pageId").data("pageCurrent");
+		var pageCount=$("#pageId").data("pageCount");
+		var cls=$(this).prop("class");
+		if(cls=="first"){//首页
+			pageCurrent=1;
+		}else if(cls=="pre"&&pageCount>1){//上一页
+			pageCurrent--;
+		}else if(cls=="next"&&pageCurrent<pageCount){//下一页
+			pageCurrent++;
+		}else if(cls=="last"){//尾页
+			pageCurrent=pageCount;
+		}
+		//点击之后要重新查询，需要获取当前页的页码（重新绑定pageCurrent）
+		$("#pageId").data("pageCurrent",pageCurrent);
+		doGetObject();
+
+		/* hasClass包含
+		 if($(this).hasClass("first")){
+			pageCurrent=1;
+		}else if($(this).hasClass("pre")&&pageCount>1){
+			pageCurrent--;
+		}else if($(this).hasClass("next")&&pageCurrent<pageCount){
+			pageCurrent++;
+		}else if($(this).hasClass("last")){
+			pageCurrent=pageCount;
+		} */
+		
+	}
 	//全选按钮操作
-	function checkAll(){
+	function checkAll() {
 		//让所有item的状态和全选保持一致 cIds为checkedId
 		//获取全选中的元素
 		var all = document.getElementById("all");
 		//查找列表中每一项的元素
 		var ckOnes = document.getElementsByName("checkedId");
-		for(var i=0;i<ckOnes.length;i++){
-			ckOnes[i].checked=all.checked;//把全选框的状态循环赋给所有的单选框
+		for (var i = 0; i < ckOnes.length; i++) {
+			ckOnes[i].checked = all.checked;//把全选框的状态循环赋给所有的单选框
 		}
 	}
 	//单选框
-	function checkOne(){
+	function checkOne() {
 		//1.获取全选/反选元素
 		var all = document.getElementById("all");
 		//2.查找列表中每一项元素
 		var ckOnes = document.getElementsByName("checkedId");
 		//3.定义一个变量，统计状态为选中的单选框个数
-		var count=0;
-		for(var i=0;i<ckOnes.length;i++){//循环各个单选
-			var ckOne=ckOnes[i];
+		var count = 0;
+		for (var i = 0; i < ckOnes.length; i++) {//循环各个单选
+			var ckOne = ckOnes[i];
 			//判断选中的
-			if(ckOne.checked==true){//循环得到单选的状态，如果单选的状态为true的话，就让count++
+			if (ckOne.checked == true) {//循环得到单选的状态，如果单选的状态为true的话，就让count++
 				count++;//在这里得到到底有几个被选中
 			}
 		}
-		if(count==ckOnes.length){//判断count	如果count的数量等于单选框的数量的话，也就是每一个
+		if (count == ckOnes.length) {//判断count	如果count的数量等于单选框的数量的话，也就是每一个
 			//都被选中的话，就让全选框状态为true
-			all.checked=true;
-		}else{
-			all.checked=false;//否则的话，全炫酷的状态为不选
+			all.checked = true;
+		} else {
+			all.checked = false;//否则的话，全炫酷的状态为不选
 		}
 	}
-	
+
 	//回车登录
 	function searchenter1(event) {
-        event = event || window.event;
-        if (event.keyCode == 13) {
-            if ($('#searchNameId').val() == '') {
-            	alert("请输入名称");
-                return false;
-            }           
-            //window.location.href =doQueryObject();
-            document.getElementById("searchId").click();//调用searchId的按钮事件
-        }
-    }
+		event = event || window.event;
+		if (event.keyCode == 13) {
+			if ($('#searchNameId').val() == '') {
+				alert("请输入名称");
+				return false;
+			}
+			//window.location.href =doQueryObject();
+			document.getElementById("searchId").click();//调用searchId的按钮事件
+		}
+	}
 	//处理查询按钮的点击事件
-	function doQueryObject(){
+	function doQueryObject() {
 		doGetObject();
 	}
-	function doLoadEditPage(){
+	function doLoadEditPage() {
 		var title;
-		if($(this).hasClass("btn-add")){
-			title="添加角色";
-		}else{
-			title="修改角色";
-			var ids=getCheckedIds();//返回的是一个数组
+		if ($(this).hasClass("btn-add")) {
+			title = "添加角色";
+		} else {
+			title = "修改角色";
+			var ids = getCheckedIds();//返回的是一个数组
 			console.log(ids);
-			if(ids.length!=1){
+			if (ids.length != 1) {
 				alert("需要选择一个");
 				return;
 			}
 			//绑定数据，目的：在编辑页面可以获取此值，因为修改时需要根据此查询
-			$(".container-fluid").data("id",ids[0]);
+			$(".container-fluid").data("id", ids[0]);
 		}
-		$(".container-fluid").load("role/addfile.do",function(){
+		$(".container-fluid").load("role/addfile.do", function() {
 			$(".box-title").html(title);
 		});
 	}
 	//实现角色的删除操作
-	function doDeleteObject(){
+	function doDeleteObject() {
 		//1.获取选中的角色id(不定项)
 		var checkedIds = getCheckedIds();
 		//console.log(checkedIds);
-		if(checkedIds.length==0){
+		if (checkedIds.length == 0) {
 			alert("请选择一个");
 			return;
 		}
 		//2.将这些id值异步传输到服务端，执行删除操作
-		var url="role/doDeleteObject.do";
-		var params={"checkedIds":checkedIds.toString()};//为什么写toString()，因为Controller端接收的数据为String，而获取的id值是一个数组，所以需要进行转换。
-		$.post(url,params,function(result){
+		var url = "role/doDeleteObject.do";
+		var params = {
+			"checkedIds" : checkedIds.toString()
+		};//为什么写toString()，因为Controller端接收的数据为String，而获取的id值是一个数组，所以需要进行转换。
+		$.post(url, params, function(result) {
 			alert(result);
 			doGetObject();//删除后，刷新页面
 		});
 	}
 
-	function getCheckedIds(){
-		var checkedIds=[];
+	function getCheckedIds() {
+		var checkedIds = [];
 		//获取所有tbody中名字为checkedId的input元素，迭代这些input元素
-		$("tbody input[name='checkedId']").each(function(){
-			if($(this).prop("checked")){
+		$("tbody input[name='checkedId']").each(function() {
+			if ($(this).prop("checked")) {
 				checkedIds.push($(this).val());
 			}
-			
-			
-			
+
 			/* if($(this).prop("checked")){
 				//假如这个input的checked属性值为true
 				if(checkedIds.length==0){
@@ -179,14 +222,21 @@
 		$.getJSON(url,params,function(result){
 			doSetTableBody(result);
 		}); */
-		var params={"pageCurrent" : 1};
-		params.name=$("#searchNameId").val();
+		var pageCurrent=$("#pageId").data("pageCurrent");//如果取到的值为undefined,也就是false，我们需要给予一个值 !pageCurrent
+		if(!pageCurrent)pageCurrent=1;
+		var params = {
+			"pageCurrent" : pageCurrent
+		};
+		params.name = $("#searchNameId").val();
 		$.ajax({
 			url : "role/doFindPageObject.do",
 			dataType : "json",//期望的返回的数据格式
 			data : params,//提交的数据
 			success : function(result) {//服务端响应ok回调此函数
-				doSetTableBody(result);//result用于接收服务端返回的数据。
+				//调用K/V
+				doSetTableBody(result.records);//result用于接收服务端返回的数据。
+				//设置分页信息
+				setPagination(result);
 			},
 			error : function(result) {//服务端响应失败
 				console.log(result);
@@ -203,24 +253,29 @@
 		//迭代data
 		for ( var i in data) {
 			var tr = $("<tr></tr>");//构建tr对象
-			tr.data("id",data[i].id);
-			tr.append("<td><input type='checkbox' name='checkedId' onclick='checkOne()' value='"+data[i].id+"'/></td>");
+			tr.data("id", data[i].id);
+			tr
+					.append("<td><input type='checkbox' name='checkedId' onclick='checkOne()' value='"
+							+ data[i].id + "'/></td>");
 			tr.append("<td>" + data[i].name + "</td>");
 			tr.append("<td>" + data[i].note + "</td>");
 			tr.append("<td>" + data[i].createdTime + "</td>");
 			tr.append("<td>" + data[i].modifiedTime + "</td>");
 			tr.append("<td>" + data[i].createdUser + "</td>");
 			tr.append("<td>" + data[i].modifiedUser + "</td>");
-			tr.append("<td><button type='button' class='btn btn-primary' onClick='doDelete(this)''>删除</button></td>");
+			tr
+					.append("<td><button type='button' class='btn btn-primary' onClick='doDelete(this)''>删除</button></td>");
 			//将tr追加到tbody
 			tBody.append(tr);
 		}
 	}
-	function doDelete(obj){
-		var id =$(obj).parent().parent().data("id");
+	function doDelete(obj) {
+		var id = $(obj).parent().parent().data("id");
 		var url = "role/doDeleteObject.do";
-		var params={"checkedIds":id};
-		$.post(url,params,function(result){
+		var params = {
+			"checkedIds" : id
+		};
+		$.post(url, params, function(result) {
 			alert(result);
 			doGetObject();
 		});

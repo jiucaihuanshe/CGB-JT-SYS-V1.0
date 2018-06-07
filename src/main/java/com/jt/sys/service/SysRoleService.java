@@ -4,6 +4,7 @@ package com.jt.sys.service;
  */
 import java.util.List;
 
+import com.jt.common.vo.PageObject;
 import com.jt.sys.pojo.SysRole;
 
 public interface SysRoleService {
@@ -14,4 +15,10 @@ public interface SysRoleService {
 	int deleteObject(String ids);
 	
 	List<SysRole> findPageObject(String name);
+	/**
+	 * @param pageCurrent 当前页面（来自Controller,Controller来自点击上一页，下一页出现的页面，客户端）
+	 * @param name 按名字搜索时输入的参数。
+	 * @return
+	 */
+	PageObject findPageObject(Integer pageCurrent,String name);
 }

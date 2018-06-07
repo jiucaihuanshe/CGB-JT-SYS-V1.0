@@ -22,4 +22,13 @@ public interface SysRoleDao {
 	//AJAX访问所有角色信息
 	//对指定名称，进行查询，对实现方法进行重用，运用动态sql技术
 	List<SysRole> findPageObject(@Param("name") String name);
+	//分页查询
+	/**
+	 * @param name 按名字查询时的查询参数
+	 * @param startIndex 分页查询时起始页的位置
+	 * @param pageSize 每页最多显示多少条记录
+	 * @return
+	 */
+	List<SysRole> findPageObject(@Param("name")String name,@Param("startIndex")Integer startIndex,@Param("pageSize")Integer pageSize);
+	int getRowCount(@Param("name")String name);
 }
