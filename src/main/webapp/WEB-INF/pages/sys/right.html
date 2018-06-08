@@ -154,6 +154,9 @@
 	}
 	//处理查询按钮的点击事件
 	function doQueryObject() {
+		//重新初始化页码的值
+		$("#pageId").data("pageCurrent",1);
+		//重新执行查询操作
 		doGetObject();
 	}
 	function doLoadEditPage() {
@@ -163,7 +166,7 @@
 		} else {
 			title = "修改角色";
 			var ids = getCheckedIds();//返回的是一个数组
-			console.log(ids);
+			//console.log(ids);
 			if (ids.length != 1) {
 				alert("需要选择一个");
 				return;
@@ -190,8 +193,12 @@
 			"checkedIds" : checkedIds.toString()
 		};//为什么写toString()，因为Controller端接收的数据为String，而获取的id值是一个数组，所以需要进行转换。
 		$.post(url, params, function(result) {
-			alert(result);
-			doGetObject();//删除后，刷新页面
+			if(result.state==1){
+				alert(result.message);
+				doGetObject();//删除后，刷新页面
+			}else{
+				alert(result.message);
+			}
 		});
 	}
 
@@ -233,10 +240,14 @@
 			dataType : "json",//期望的返回的数据格式
 			data : params,//提交的数据
 			success : function(result) {//服务端响应ok回调此函数
-				//调用K/V
-				doSetTableBody(result.records);//result用于接收服务端返回的数据。
-				//设置分页信息
-				setPagination(result);
+				if(result.state==1){
+					//调用K/V
+					doSetTableBody(result.data.records);//result用于接收服务端返回的数据。
+					//设置分页信息
+					setPagination(result.data);
+				}else{
+					alert(result.message);
+				}
 			},
 			error : function(result) {//服务端响应失败
 				console.log(result);
@@ -276,8 +287,13 @@
 			"checkedIds" : id
 		};
 		$.post(url, params, function(result) {
-			alert(result);
-			doGetObject();
+			if(result.state==1){
+				alert(result.message);
+				doGetObject();
+			}else{
+				alert(result.message);
+			}
+			
 		});
 	}
 </script>

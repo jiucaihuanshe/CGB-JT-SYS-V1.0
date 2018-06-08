@@ -10,7 +10,7 @@
 		</where>
 	</sql>
 	<select id="findUserObject" resultType="sysUser">
-		select * from sys_users
+		select id,username,email,mobile,valid from sys_users
 		<include refid="whereSqlId"></include>
 		order by createdTime desc
 		limit #{startIndex},#{pageSize}
@@ -19,4 +19,16 @@
 		select count(*) from sys_users
 		<include refid="whereSqlId"></include>
 	</select>
+	<select id="findUserById" resultType="sysUser">
+		select id,username,email,mobile,valid from sys_users where id=#{id}
+	</select>
+	<insert id="saveObject" parameterType="sysUser">
+		insert into sys_users(id,username,email,mobile,valid) values(null,#{username},#{email},#{mobile},#{valid})
+	</insert>
+	<update id="updateObject" parameterType="sysUser">
+		update sys_users set username=#{username},email=#{email},mobile=#{mobile},valid=#{valid} where id=#{id};
+	</update>
+	 <delete id="deleteObject" parameterType="integer">
+	 	delete from sys_users where id=#{id}
+	 </delete>
 </mapper>

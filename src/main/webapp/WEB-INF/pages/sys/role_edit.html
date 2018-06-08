@@ -46,7 +46,11 @@
 		var url="role/doFindObjectById.do";
 		var params={"id":id};
 		$.getJSON(url,params,function(result){
-			doInitEditForm(result);
+			if(result.state==1){
+				doInitEditForm(result.data);
+			}else{
+				alert(result.message);
+			}
 		});
 	}
 	//初始化表单页面
@@ -71,9 +75,13 @@
 		var inserturl="role/doInsertObject.do";
 		var url=id?updateurl:inserturl;
 		$.post(url,params,function(result){
-			alert(result);
-			//退出当前页面
-			doCancel();
+			if(result.state==1){
+				alert(result.message);
+				//退出当前页面
+				doCancel();
+			}else{
+				alert(result.message);
+			}
 		});
 	}
 	//获取表单数据
