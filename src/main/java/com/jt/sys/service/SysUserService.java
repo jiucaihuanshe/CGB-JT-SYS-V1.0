@@ -4,9 +4,8 @@ import com.jt.common.vo.PageObject;
 import com.jt.sys.pojo.SysUser;
 
 public interface SysUserService {
-	PageObject findUserObject(String username,Integer pageCurrent);
-	SysUser findUserById(Integer id);
-	int saveObject(SysUser entity);
-	int updateObject(SysUser entity);
-	int deleteObject(Integer id);
+	PageObject<SysUser> findUserObject(String username,Integer pageCurrent);
+	/**禁用和启用*/
+	int validById(Integer id,Integer valid,String modifiedUser);
+
 }

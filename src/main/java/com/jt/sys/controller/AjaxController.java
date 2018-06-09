@@ -1,13 +1,8 @@
 package com.jt.sys.controller;
-import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jt.common.vo.PageObject;
 import com.jt.sys.service.SysRoleService;
 
 @RequestMapping("/role/")

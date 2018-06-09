@@ -53,7 +53,7 @@ public class SysRoleServiceImpl implements SysRoleService{
 		return sysRoleDao.deleteObject(checkedIds);
 	}
 	@Override
-	public PageObject findPageObject(Integer pageCurrent, String name) {
+	public PageObject<SysRole> findPageObject(Integer pageCurrent, String name) {
 		if(pageCurrent<1){
 			throw new ServiceException("当前页码不能为负数");
 		}
@@ -70,7 +70,7 @@ public class SysRoleServiceImpl implements SysRoleService{
 			pageCount++;
 		}
 		//3.封装数据(封装到PageObject)
-		PageObject pageObject = new PageObject();
+		PageObject<SysRole> pageObject = new PageObject<>();
 		pageObject.setRecords(list);
 		pageObject.setRowCount(rowCount);
 		pageObject.setPageCount(pageCount);

@@ -28,7 +28,7 @@ public class SysRoleController {
 	@ResponseBody
 	public JsonResult doFindPageObject(@RequestParam("pageCurrent") Integer pageCurrent,String name){
 		System.out.println("pageCurrent="+pageCurrent);
-		PageObject pageObject = sysRoleService.findPageObject(pageCurrent,name);
+		PageObject<SysRole> pageObject = sysRoleService.findPageObject(pageCurrent,name);
 		return new JsonResult(1,"query ok",pageObject);
 	}
 	@RequestMapping("doInsertObject")

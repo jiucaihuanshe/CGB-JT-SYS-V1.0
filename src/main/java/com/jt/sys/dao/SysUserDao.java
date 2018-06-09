@@ -5,13 +5,14 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.jt.sys.pojo.SysUser;
+import com.sun.org.glassfish.gmbal.ParameterNames;
 
 public interface SysUserDao {
 	//查询 name,All,考虑分页的话，有startIndex,pageSize
 	List<SysUser> findUserObject(@Param("username")String username,@Param("startIndex")Integer startIndex,@Param("pageSize")Integer pageSize);
 	int getRowCount(@Param("username")String username);
-	//id查询
-	SysUser findUserById(Integer id);
+	//通过这个方法实现禁用启用操作。
+	int validById(@Param("id")Integer id,@Param("valid")Integer valid,@Param("modifiedUser")String modifiedUser);
 	//增加
 	int saveObject(SysUser entity);
 	//修改

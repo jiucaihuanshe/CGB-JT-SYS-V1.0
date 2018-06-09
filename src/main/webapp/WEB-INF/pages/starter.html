@@ -408,7 +408,9 @@ desired effect
 				});
 			});
 			$("#load-user-id").click(function(){
-				$(".container-fluid").load("role/userfile.do");
+				$(".container-fluid").load("user/userfile.do",function(){
+					$(".container-fluid").removeData("id");
+				});
 			});
 		});
 </script>

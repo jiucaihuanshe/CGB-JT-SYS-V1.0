@@ -20,5 +20,5 @@ public interface SysRoleService {
 	 * @param name 按名字搜索时输入的参数。
 	 * @return
 	 */
-	PageObject findPageObject(Integer pageCurrent,String name);
+	PageObject<SysRole> findPageObject(Integer pageCurrent,String name);
 }

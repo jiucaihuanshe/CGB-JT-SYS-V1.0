@@ -29,6 +29,8 @@
 						<th>邮箱</th>
 						<th>手机号</th>
 						<th>状态</th>
+						<th>创建时间</th>
+						<th>修改时间</th>
 						<th>操作</th>
 					</tr>
 					<tbody id="tabBodyId">
@@ -38,16 +40,10 @@
 			</div>
 			<!-- /.box-body -->
 			<div id="pageId" class="box-footer clearfix">
-				<ul class="pagination pagination-sm no-margin pull-right">
-					<li><a class="first">首页</a></li>
-					<li><a class="pre">上一页</a></li>
-					<li><a class="next">下一页</a></li>
-					<li><a class="last">尾页</a></li>
-					<li><a class="rowCount">总记录数(3)</a></li>
-					<li><a class="pageCount">总页数(3)</a></li>
-					<li><a class="pageCurrent">当前页(1)</a></li>
-				</ul>
 			</div>
+				<script type="text/javascript">
+					$("#pageId").load("user/pageUI.do");
+				</script>
 			<!-- /.box-body -->
 		</div>
 		<!-- /.box -->
@@ -56,38 +52,19 @@
 <script type="text/javascript">
 	$(function(){
 		doGetObject();
-		//对每个分页元素进行监听
-		$("#pageId").on("click",".first,.pre,.next,.last",doJumpToPage);
+		$(".input-group-sm").on("click",".btn-search",doQueryObject)
+		.on("click",".btn-add,.btn-update",doLoadEditPage);
 	});
-	//分页信息初始化
-	function setPagination(pageObject){
-		$(".rowCount").html("总记录数("+pageObject.rowCount+")");
-		$(".pageCount").html("总页数("+pageObject.pageCount+")");
-		$(".pageCurrent").html("当前页("+pageObject.pageCurrent+")");
-		
-		$("#pageId").data("pageCurrent",pageObject.pageCurrent);
-		$("#pageId").data("pageCount",pageObject.pageCount);
+	function doLoadEditPage(){
+		$(".container-fluid").load("user/userEdit.do");
 	}
-	//对分页的事件处理
-	function doJumpToPage(){
-		var pageCurrent = $("#pageId").data("pageCurrent");
-		var pageCount = $("#pageId").data("pageCount");
-		if($(this).hasClass("first")){
-			pageCurrent=1;
-		}else if($(this).hasClass("pre")&&pageCurrent>1){
-			pageCurrent--;
-		}else if($(this).hasClass("next")&&pageCurrent<pageCount){
-			pageCurrent++;
-		}else if($(this).hasClass("last")){
-			pageCurrent=pageCount;
-		}
-		//重新绑定当前页
-		$("#pageId").data("pageCurrent",pageCurrent);
+	function doQueryObject(){
+		$("#pageId").data("pageCurrent",1);
 		doGetObject();
 	}
 	//加载用户信息
 	function doGetObject(){
-		var url="role/dofindUserObject.do";
+		var url="user/dofindUserObject.do";
 		var pageCurrent=$("#pageId").data("pageCurrent");
 		if(!pageCurrent)pageCurrent=1;
 		var params={"pageCurrent":pageCurrent};
@@ -95,7 +72,7 @@
 		$.getJSON(url,params,function(result){
 			if(result.state==1){
 				//将服务器返回的数据填充到表格中
-				setTableBodyRows(result.data.userrecords);
+				setTableBodyRows(result.data.records);
 				//设置分页
 				setPagination(result.data);
 			}else{
@@ -108,17 +85,44 @@
 		tBody.empty();
 		for(var i in result){
 			var tr=$("<tr></tr>");
-			var tds = "<td><input type='radio' name='radioId' onClick='radioOne()' value='"+result[i].id+"'/></td>"+
+			//在tr对象上绑定一个id
+			tr.data("id",result[i].id);
+			//绑定相反的值传入数据库修改
+			tr.data("valid",result[i].valid?0:1);
+			var tds = "<td><input type='radio' name='radioId' value='"+result[i].id+"'/></td>"+
 			"<td>"+result[i].username+"</td>"+
 			"<td>"+result[i].email+"</td>"+
 			"<td>"+result[i].mobile+"</td>"+
-			"<td>"+result[i].valid+"</td>"+
-			"<td>"+result[i].valid+"</td>";
+			"<td>"+(result[i].valid?"启用":"禁用")+"</td>"+
+			"<td>"+result[i].createdTime+"</td>"+
+			"<td>"+result[i].modifiedTime+"</td>"+
+			"<td><button class='btn btn-defaultss' onClick='doValid(this)'>"+(result[i].valid?"禁用":"启用")+"</button></td>";
 			tr.append(tds);
 			tBody.append(tr);
 		}
 	}
-	function radioOne(){
-		
+	/**在此函数中实现启用和禁用操作*/
+	function doValid(obj){
+		//1.url	
+	var url = "user/dovalidById.do";
+		//2.params
+		//var id=obj.parents("tr").data("id");
+		//obj.parent()的对象是td，td的对象tr tr.data取出一个id值
+		var id = $(obj).parent().parent().data("id");
+		var valid = $(obj).parents("tr").data("valid");
+		var params = {
+			"id" : id,
+			"valid" : valid
+		}
+		//console.log(params);
+		//3.post
+		$.post(url, params, function(result) {//4.callback
+			if (result.state == 1) {
+				alert(result.message);
+				doGetObject();
+			} else {
+				alert(result.message);
+			}
+		});
 	}
 </script>
