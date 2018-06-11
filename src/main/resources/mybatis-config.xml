@@ -7,10 +7,11 @@
         <setting name="logImpl" value="LOG4J" />
     </settings>
     <typeAliases>
-    	<package name="com.jt.sys"/>
+    	<package name="com.jt"/>
     </typeAliases>
     <mappers>
     	<mapper resource="mapper/sys/SysRoleMapper.xml"/>
     	<mapper resource="mapper/sys/SysUserMapper.xml"/>
+    	<mapper resource="mapper/sys/SysUserRoleMapper.xml"/>
     </mappers>
 </configuration>

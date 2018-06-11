@@ -23,5 +23,14 @@
 	<update id="validById" parameterType="sysUser">
 		update sys_users set valid=#{valid},modifiedTime=now(),modifiedUser=#{modifiedUser} where id=#{id};
 	</update>
-	
+	<!-- 向表中写入记录 -->
+	<!-- parameterType参数类型，keyProperty="id"这个id指的是parameterType="sysUser"类型中的属性
+	它会把这条记录的主键值赋值个这个对象(parameterType="sysUser")的id这个属性  前提是数据库支持自增长的id
+	 -->
+	 <!-- useGeneratedKeys="true"把新增加的主键赋值到自己定义的keyProperty(id)中 -->
+	<insert id="insertObject" parameterType="sysUser" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_users(username,password,email,mobile,salt,valid,createdUser,modifiedUser,createdTime,modifiedTime)
+		values
+		(#{username},#{password},#{email},#{mobile},#{salt},#{valid},#{createdUser},#{modifiedUser},now(),now())
+	</insert>
 </mapper>

@@ -8,4 +8,5 @@ public interface SysUserService {
 	/**禁用和启用*/
 	int validById(Integer id,Integer valid,String modifiedUser);
 
+	int insertObject(SysUser entity,String roleIds);
 }

@@ -56,6 +56,9 @@
 		.on("click",".btn-add,.btn-update",doLoadEditPage);
 	});
 	function doLoadEditPage(){
+		//绑定id，目的：在编辑页面获取此值，便于修改操作。
+		//var id=????
+		$(".container-fluid").data("id",);
 		$(".container-fluid").load("user/userEdit.do");
 	}
 	function doQueryObject(){

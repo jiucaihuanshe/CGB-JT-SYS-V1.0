@@ -43,4 +43,8 @@
 		select count(*) from sys_roles
 		<include refid="whereSqlId"/>
 	</select>
+		<!-- 获取所有角色信息 -->
+	<select id="findObjects" resultType="checkBox">
+		select id,name from sys_roles
+	</select>
 </mapper>

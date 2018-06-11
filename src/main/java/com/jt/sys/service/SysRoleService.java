@@ -4,6 +4,7 @@ package com.jt.sys.service;
  */
 import java.util.List;
 
+import com.jt.common.vo.CheckBox;
 import com.jt.common.vo.PageObject;
 import com.jt.sys.pojo.SysRole;
 
@@ -21,4 +22,6 @@ public interface SysRoleService {
 	 * @return
 	 */
 	PageObject<SysRole> findPageObject(Integer pageCurrent,String name);
+	
+	List<CheckBox> findObjects();
 }

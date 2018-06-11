@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.jt.common.exception.ServiceException;
 import com.jt.common.vo.PageObject;
 import com.jt.sys.dao.SysUserDao;
+import com.jt.sys.dao.SysUserRoleDao;
 import com.jt.sys.pojo.SysUser;
 import com.jt.sys.service.SysUserService;
 @Service
@@ -16,6 +17,8 @@ public class SysUserServiceImpl implements SysUserService{
 	@Autowired//默认按类型注入
 	@Qualifier("sysUserDao")//假如在当前运行的环境中，这个类型的对象有多个，执行默认类型注入时可能会失败，按名字注入
 	private SysUserDao sysUserDao;
+	@Autowired
+	private SysUserRoleDao sysUserRoleDao;
 	@Override
 	public PageObject<SysUser> findUserObject(String username, Integer pageCurrent) {
 		if(pageCurrent<1){
@@ -49,46 +52,23 @@ public class SysUserServiceImpl implements SysUserService{
 		int rows = sysUserDao.validById(id, valid,modifiedUser);
 		return rows;
 	}
-	
-	
-	
-	
-	
-	
-	
-	/*@Override
-	public int saveObject(SysUser entity) {
-		if("admin".equals(entity.getUsername()))
-		throw new ServiceException("此角色已经存在");
-		int rows = sysUserDao.saveObject(entity);
+
+	@Override
+	public int insertObject(SysUser entity, String roleIds) {
+		//1.保存用户信息
+		//System.out.println("start.id="+entity.getId());
+		int rows = sysUserDao.insertObject(entity);
+		//System.out.println("end.id="+entity.getId());
+		//2.保存关系数据(用户与角色关系数据)
+		sysUserRoleDao.insertObject(entity.getId(), roleIds.split(","));
 		return rows;
 	}
 	
-	@Override
-	public SysUser findUserById(Integer id) {
-		if(id==null)
-		throw new ServiceException("查询的id不能为空");
-		SysUser entity = sysUserDao.findUserById(id);
-		return entity;
-	}
-	@Override
-	public int updateObject(SysUser entity) {
-		if(entity==null){
-			throw new ServiceException("更新的对象不能为空");
-		}
-		if(entity.getId()==null){
-			throw new ServiceException("更新的对象的id不能为空");
-		}
-		int rows = sysUserDao.updateObject(entity);
-		return rows;
-	}
-	@Override
-	public int deleteObject(Integer id) {
-		if(id==null){
-			throw new ServiceException("选中的记录不能为空");
-		}
-		int rows = sysUserDao.deleteObject(id);
-		return rows;
-	}*/
+	
+	
+	
+	
+	
+	
 	
 }

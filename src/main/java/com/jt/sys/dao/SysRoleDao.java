@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.jt.common.vo.CheckBox;
 import com.jt.sys.pojo.SysRole;
 //数据持久层对象
 public interface SysRoleDao {
 	//查询所有角色信息
-	
 	List<SysRole> findPageObjects();
 	//向表中写入数据
 	int insertObject(SysRole entity);
@@ -31,4 +31,7 @@ public interface SysRoleDao {
 	 */
 	List<SysRole> findPageObject(@Param("name")String name,@Param("startIndex")Integer startIndex,@Param("pageSize")Integer pageSize);
 	int getRowCount(@Param("name")String name);
+	
+	//查询角色的信息。
+	List<CheckBox> findObjects();
 }

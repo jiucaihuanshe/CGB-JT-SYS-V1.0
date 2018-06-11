@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jt.common.vo.CheckBox;
 import com.jt.common.vo.JsonResult;
 import com.jt.common.vo.PageObject;
 import com.jt.sys.pojo.SysRole;
@@ -54,6 +55,12 @@ public class SysRoleController {
 	public JsonResult doDeleteObject(String checkedIds){
 		sysRoleService.deleteObject(checkedIds);
 		return new JsonResult(1,"delect ok");
+	}
+	@RequestMapping("doFindObjects")
+	@ResponseBody
+	public JsonResult odFindObjects(){
+		List<CheckBox> list = sysRoleService.findObjects();
+		return new JsonResult(1, "ok",list);
 	}
 	
 	//---------------------------------------------------

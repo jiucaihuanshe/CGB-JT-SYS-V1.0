@@ -40,7 +40,14 @@ public class SysUserController{
 		sysUserService.validById(id, valid,"admin");
 		return new JsonResult(1,"valid ok");
 	}
-	
+	@RequestMapping("doSaveObject")
+	@ResponseBody
+	public JsonResult doSaveObject(SysUser entity,String roleIds){
+//		System.out.println(user);
+//		System.out.println(roleIds);
+		sysUserService.insertObject(entity, roleIds);
+		return new JsonResult(1,"save ok");
+	}
 	
 	
 	

@@ -34,9 +34,7 @@
 			<div class="form-group">
 				<label for="noteId" class="col-sm-2 control-label">角色</label>
 				<div class="col-sm-10" id="rolesId">
-					<input type="checkbox" name="roleId"/>管理员
-					<input type="checkbox" name="roleId"/>产品经理
-					<input type="checkbox" name="roleId"/>运营人员
+					
 				</div>
 			</div>
 		</div>
@@ -48,3 +46,65 @@
 		<!-- /.box-footer -->
 	</form>
 </div>
+<script type="text/javascript">
+	$(function(){
+		doLoadRoles();
+		$(".box-footer").on("click",".btn-cancel",doCancel)
+		.on("click",".btn-save",doSaveOrUpdate);
+	});
+	function doLoadRoles(){
+		var url = "role/doFindObjects.do";
+		$.getJSON(url,function(result){
+			if(result.state==1){
+				doSetRolesCheckBox(result.data);
+			}else{
+				alert(result.message);
+			}
+		});
+	}
+	function doSetRolesCheckBox(data){
+		var rolesDiv=$("#rolesId");
+		var cBox="<input type='checkbox' name='roleBox' value='[id]'>[name]</input>";
+		for(var i in data){
+			//console.log(data);
+			rolesDiv.append(cBox.replace('[id]',data[i].id)
+					.replace('[name]',data[i].name));
+		}//replace函数时一个字符串函数，用于实现字符串的替换，但会返回一个新串。
+	}
+	function doCancel(){
+		$(".container-fluid").load("user/userfile.do");
+		//$(".container-fluid").removeData("id");
+	}
+	function doSaveOrUpdate(){
+		//获取表单数据
+		var params=doFormData();
+		//console.log(params);
+		//异步加载到服务端
+		var url="user/doSaveObject.do";
+		$.post(url,params,function(result){
+			if(result.state==1){
+				alert(result.message);
+			}else{
+				alert(result.message);
+			}
+		});
+	}
+	function doFormData(){
+		var params={
+				"username":$("#usernameId").val(),
+				"password":$("#passwordId").val(),
+				"email":$("#emailId").val(),
+				"mobile":$("#mobileId").val()
+		};
+		var checkedIds =[];
+		$("#rolesId input[type='checkbox']").each(function(){
+			//prop 设置或返回被选中元素的属性或值
+			//push 可向数组的末尾添加一个或多个元素，并返回新的长度。
+			if($(this).prop("checked")){
+				checkedIds.push($(this).val());
+			}
+		});
+		params.roleIds=checkedIds.toString();
+		return params;
+	}
+</script>
