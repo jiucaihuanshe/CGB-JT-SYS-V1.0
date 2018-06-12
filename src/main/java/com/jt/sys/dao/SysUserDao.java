@@ -15,10 +15,12 @@ public interface SysUserDao {
 	
 	//增加
 	int insertObject(SysUser entity);
-
-	
 	//修改
 	int updateObject(SysUser entity);
+	
+	//根据id查找用户信息
+	SysUser findObjectById(Integer id);
+	
 	//删除
 	int deleteObject(Integer id);
 }

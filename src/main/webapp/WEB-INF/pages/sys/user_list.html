@@ -55,11 +55,41 @@
 		$(".input-group-sm").on("click",".btn-search",doQueryObject)
 		.on("click",".btn-add,.btn-update",doLoadEditPage);
 	});
+	/**加载添加或编辑页面*/
 	function doLoadEditPage(){
-		//绑定id，目的：在编辑页面获取此值，便于修改操作。
-		//var id=????
-		$(".container-fluid").data("id",);
-		$(".container-fluid").load("user/userEdit.do");
+		//1.获得点击对象上的class，根据class判定点击的对象
+		var title;
+		if($(this).hasClass("btn-add")){
+			title="添加用户";
+		}else if($(this).hasClass("btn-update")){
+			title="修改用户";
+			//获得选中的id
+			var checkedId=getCheckedId();
+			console.log("id="+checkedId);
+			//对获取的数据进行验证
+			if(!checkedId){
+				alert("请先选择");
+				return;
+			}
+			//绑定数据(修改页面要使用此数据)
+			$(".container-fluid").data("userId",checkedId);
+			//绑定id，目的：在编辑页面获取此值，便于修改操作。
+		}
+		//2.发异步请求加载页面
+		$(".container-fluid").load("user/userEdit.do",function(){
+			//修改页面标题
+			$(".box-title").html(title);
+		});
+	}
+	//获取选中的ID
+	function getCheckedId(){
+		var checkedId;
+		$("tbody input[name='radioId']").each(function(){
+			if($(this).prop("checked")){
+				checkedId=$(this).val();
+			}
+		});
+		return checkedId;
 	}
 	function doQueryObject(){
 		$("#pageId").data("pageCurrent",1);

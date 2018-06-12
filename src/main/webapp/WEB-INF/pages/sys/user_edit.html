@@ -51,7 +51,38 @@
 		doLoadRoles();
 		$(".box-footer").on("click",".btn-cancel",doCancel)
 		.on("click",".btn-save",doSaveOrUpdate);
+		var id=$(".container-fluid").data("userId");
+		//如果id是有值的，说明是更新。
+		if(id){
+			doFindObjectById(id);
+		}
 	});
+	//根据id查找用户对象，然后初始化页码
+	function doFindObjectById(id){
+		var url = "user/doFindObjectById.do";
+		var params={"id":id};
+		$.getJSON(url,params,function(result){
+				doInitEditForm(result);
+		});
+	}
+	//初始化表单页面
+	function doInitEditForm(result){
+		//console.log(result);
+		//1.获取用户基本信息
+		var user = result.data.sysUser;
+		//2.初始化用户基本信息
+		$("#usernameId").val(user.username);
+		$("#emailId").val(user.email);
+		$("#mobileId").val(user.mobile);
+		//3.获取用户角色信息
+		var roleIds = result.data.roleIds;
+		//4.初始化用户角色信息
+		//4.1迭代页面所有角色checkbox
+		$("#rolesId input[type='checkbox']").each(function(){
+			
+		});
+		//4.2比对checkbox是否与用户角色值相等
+	}
 	function doLoadRoles(){
 		var url = "role/doFindObjects.do";
 		$.getJSON(url,function(result){
@@ -64,7 +95,7 @@
 	}
 	function doSetRolesCheckBox(data){
 		var rolesDiv=$("#rolesId");
-		var cBox="<input type='checkbox' name='roleBox' value='[id]'>[name]</input>";
+		var cBox="<input type='checkbox' name='roleBox' value=[id]>[name]</input>";
 		for(var i in data){
 			//console.log(data);
 			rolesDiv.append(cBox.replace('[id]',data[i].id)
@@ -73,7 +104,7 @@
 	}
 	function doCancel(){
 		$(".container-fluid").load("user/userfile.do");
-		//$(".container-fluid").removeData("id");
+		$(".container-fluid").removeData("id");
 	}
 	function doSaveOrUpdate(){
 		//获取表单数据
@@ -84,6 +115,7 @@
 		$.post(url,params,function(result){
 			if(result.state==1){
 				alert(result.message);
+				doCancel();
 			}else{
 				alert(result.message);
 			}

@@ -1,6 +1,8 @@
 package com.jt.sys.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -62,6 +64,19 @@ public class SysUserServiceImpl implements SysUserService{
 		//2.保存关系数据(用户与角色关系数据)
 		sysUserRoleDao.insertObject(entity.getId(), roleIds.split(","));
 		return rows;
+	}
+
+	@Override
+	public Map<String, Object> findObjectById(Integer id) {
+		//查找用户信息
+		SysUser user= sysUserDao.findObjectById(id);
+		//查找角色信息
+		List<Integer> roleIds = sysUserRoleDao.findRolesByUserId(id);
+		//封装数据
+		Map<String, Object> map = new HashMap<>();
+		map.put("sysUser", user);
+		map.put("roleIds", roleIds);
+		return map;
 	}
 	
 	

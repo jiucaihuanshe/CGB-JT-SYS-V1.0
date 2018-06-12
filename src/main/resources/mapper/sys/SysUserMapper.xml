@@ -33,4 +33,8 @@
 		values
 		(#{username},#{password},#{email},#{mobile},#{salt},#{valid},#{createdUser},#{modifiedUser},now(),now())
 	</insert>
+	<!-- 根据id查询用户信息 -->
+	<select id="findObjectById" resultType="sysUser">
+		select * from sys_users where id=#{id}
+	</select>
 </mapper>

@@ -1,5 +1,7 @@
 package com.jt.sys.controller;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,12 @@ public class SysUserController{
 	@RequestMapping("pageUI")
 	public String pageUI(){
 		return "sys/page";
+	}
+	@RequestMapping("doFindObjectById")
+	@ResponseBody
+	public JsonResult doFindObjectById(Integer id){
+		Map<String, Object> map = sysUserService.findObjectById(id);
+		return new JsonResult(1,"ok",map);
 	}
 	@RequestMapping("dofindUserObject")
 	@ResponseBody

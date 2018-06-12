@@ -8,4 +8,7 @@
 			(#{userId},#{roleId})
 		</foreach>
 	</insert>
+	<select id="findRolesByUserId" resultType="integer">
+		select role_id from sys_roles_users where user_id=#{id}
+	</select>
 </mapper>

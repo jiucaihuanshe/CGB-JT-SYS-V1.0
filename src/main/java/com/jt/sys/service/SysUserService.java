@@ -1,5 +1,7 @@
 package com.jt.sys.service;
 
+import java.util.Map;
+
 import com.jt.common.vo.PageObject;
 import com.jt.sys.pojo.SysUser;
 
@@ -9,4 +11,6 @@ public interface SysUserService {
 	int validById(Integer id,Integer valid,String modifiedUser);
 
 	int insertObject(SysUser entity,String roleIds);
+	
+	Map<String,Object> findObjectById(Integer id);
 }
