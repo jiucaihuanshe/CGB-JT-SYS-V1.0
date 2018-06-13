@@ -269,6 +269,7 @@ desired effect
               </span>
           </a>
           <ul class="treeview-menu">
+          	<li><a id="load-menu-id">菜单管理</a></li>
             <li><a id="load-role-id">角色管理</a></li>
             <li><a id="load-user-id">用户管理</a></li>
           </ul>
@@ -410,6 +411,11 @@ desired effect
 			$("#load-user-id").click(function(){
 				$(".container-fluid").load("user/userfile.do",function(){
 					$(".container-fluid").removeData("userId");
+				});
+			});
+			$("#load-menu-id").click(function(){
+				$(".container-fluid").load("menu/listUI.do",function(){
+					$(".container-fluid").removeData("id");
 				});
 			});
 		});

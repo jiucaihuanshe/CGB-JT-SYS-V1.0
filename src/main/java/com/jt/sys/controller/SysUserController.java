@@ -12,7 +12,7 @@ import com.jt.common.vo.JsonResult;
 import com.jt.common.vo.PageObject;
 import com.jt.sys.pojo.SysUser;
 import com.jt.sys.service.SysUserService;
-@RequestMapping("user")
+@RequestMapping("/user/")
 @Controller
 public class SysUserController{
 	//与接口建立关系，@Autowired按类型注入	多个类型相同时需要注意
