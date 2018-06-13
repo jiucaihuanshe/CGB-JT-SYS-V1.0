@@ -11,4 +11,7 @@
 	<select id="findRolesByUserId" resultType="integer">
 		select role_id from sys_roles_users where user_id=#{id}
 	</select>
+	<delete id="deleteObject">
+		delete from sys_roles_users where user_id=#{userId}
+	</delete>
 </mapper>

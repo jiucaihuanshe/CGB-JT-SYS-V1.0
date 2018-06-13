@@ -13,4 +13,6 @@ public interface SysUserService {
 	int insertObject(SysUser entity,String roleIds);
 	
 	Map<String,Object> findObjectById(Integer id);
+	
+	int updateObject(SysUser entity,String roleIds);
 }

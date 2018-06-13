@@ -10,4 +10,6 @@ public interface SysUserRoleDao {
 	int insertObject(@Param("userId") Integer userId,@Param("roleIds") String[] roleIds);
 	int updateObject(@Param("userId")Integer userId,@Param("roleIds")String[] roleIds);
 	List<Integer> findRolesByUserId(Integer id);
+	//目的是在修改用户角色关系时，先删除原先关系在添加新的关系
+	int deleteObject(Integer userId);
 }

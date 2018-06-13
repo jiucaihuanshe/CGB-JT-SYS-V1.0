@@ -56,8 +56,13 @@ public class SysUserController{
 		sysUserService.insertObject(entity, roleIds);
 		return new JsonResult(1,"save ok");
 	}
-	
-	
+	@RequestMapping("doUpdateObject")
+	@ResponseBody
+	public JsonResult doUpdateObject(SysUser entity,String roleIds){
+		entity.setModifiedUser("admin");
+		sysUserService.updateObject(entity, roleIds);
+		return new JsonResult(1,"ok");
+	}
 	
 	
 	

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.jt.common.exception.ServiceException;
 import com.jt.common.vo.PageObject;
@@ -77,6 +78,23 @@ public class SysUserServiceImpl implements SysUserService{
 		map.put("sysUser", user);
 		map.put("roleIds", roleIds);
 		return map;
+	}
+
+	@Override
+	public int updateObject(SysUser entity, String roleIds) {
+		//1.参数业务验证
+		if(entity==null)throw new ServiceException("更新对象不能为空");
+		if(entity.getId()==null)throw new ServiceException("更新用户时id不能为空");
+		if(StringUtils.isEmpty(roleIds))throw new ServiceException("用户角色不能为空");
+		//2.更新数据
+		//2.1更新用户基本信息
+		int rows = sysUserDao.updateObject(entity);
+		//2.2删除用户角色关系数据
+		int dele = sysUserRoleDao.deleteObject(entity.getId());
+		System.out.println("dele="+dele);
+		//2.3重新建立关系
+		sysUserRoleDao.insertObject(entity.getId(), roleIds.split(","));
+		return rows;
 	}
 	
 	

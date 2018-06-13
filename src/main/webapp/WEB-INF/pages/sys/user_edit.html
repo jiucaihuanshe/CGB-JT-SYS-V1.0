@@ -51,13 +51,13 @@
 		doLoadRoles();
 		$(".box-footer").on("click",".btn-cancel",doCancel)
 		.on("click",".btn-save",doSaveOrUpdate);
-		var id=$(".container-fluid").data("userId");
+		//var id=$(".container-fluid").data("userId");
 		//如果id是有值的，说明是更新。
-		if(id){
-			doFindObjectById(id);
-		}
+		//if(id){
+		//	doFindObjectById(id);
+		//}
 	});
-	//根据id查找用户对象，然后初始化页码
+	//根据id查找用户对象，然后初始化页面
 	function doFindObjectById(id){
 		var url = "user/doFindObjectById.do";
 		var params={"id":id};
@@ -79,15 +79,24 @@
 		//4.初始化用户角色信息
 		//4.1迭代页面所有角色checkbox
 		$("#rolesId input[type='checkbox']").each(function(){
-			
+			//4.2比对checkbox是否与用户角色值相等
+			for(var i in roleIds){
+				if($(this).val()==roleIds[i]){
+					$(this).prop("checked",true);
+				}
+			}
 		});
-		//4.2比对checkbox是否与用户角色值相等
 	}
 	function doLoadRoles(){
 		var url = "role/doFindObjects.do";
 		$.getJSON(url,function(result){
 			if(result.state==1){
 				doSetRolesCheckBox(result.data);
+				//页面加载时候加载，移动到这里是为了防止异步加载顺序。防止角色信息先加载了，
+				//而页面表单数据未加载完成，出现数据错误。
+				var id=$(".container-fluid").data("userId");
+				//console.log("id="+id);
+				if(id)doFindObjectById(id);
 			}else{
 				alert(result.message);
 			}
@@ -103,15 +112,24 @@
 		}//replace函数时一个字符串函数，用于实现字符串的替换，但会返回一个新串。
 	}
 	function doCancel(){
+		//异步加载列表页面
 		$(".container-fluid").load("user/userfile.do");
-		$(".container-fluid").removeData("id");
+		//移除绑定的id值
+		$(".container-fluid").removeData("userId");
 	}
 	function doSaveOrUpdate(){
-		//获取表单数据
+		//1.获取表单数据
+		//1.1获取表单用户填写的数据
 		var params=doFormData();
 		//console.log(params);
-		//异步加载到服务端
-		var url="user/doSaveObject.do";
+		//1.2假如是修改则需要传递用户id
+		var id=$(".container-fluid").data("userId");
+		console.log("ids="+id);
+		if(id)params.id=id;
+		//2.异步加载到服务端
+		var insertUrl="user/doSaveObject.do";
+		var updateUrl="user/doUpdateObject.do";
+		var url = id?updateUrl:insertUrl;
 		$.post(url,params,function(result){
 			if(result.state==1){
 				alert(result.message);
@@ -124,10 +142,9 @@
 	function doFormData(){
 		var params={
 				"username":$("#usernameId").val(),
-				"password":$("#passwordId").val(),
 				"email":$("#emailId").val(),
 				"mobile":$("#mobileId").val()
-		};
+		};//SysUser
 		var checkedIds =[];
 		$("#rolesId input[type='checkbox']").each(function(){
 			//prop 设置或返回被选中元素的属性或值
