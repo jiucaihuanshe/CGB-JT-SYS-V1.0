@@ -53,7 +53,8 @@ public class SysRoleController {
 	@RequestMapping("doDeleteObject")
 	@ResponseBody
 	public JsonResult doDeleteObject(String checkedIds){
-		sysRoleService.deleteObject(checkedIds);
+		int rows = sysRoleService.deleteObject(checkedIds);
+		//System.out.println("rows="+rows);//rows=1
 		return new JsonResult(1,"delect ok");
 	}
 	@RequestMapping("doFindObjects")

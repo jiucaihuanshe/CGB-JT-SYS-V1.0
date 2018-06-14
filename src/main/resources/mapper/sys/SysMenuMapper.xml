@@ -8,4 +8,30 @@
 		parentName
 		from sys_menus m
 	</select>
+	<!-- 查询要删除的菜单是否有子菜单 -->
+	<select id="hasChild" resultType="int">
+		select count(*) from sys_menus where parentId=#{menuId}
+	</select>
+	<!-- 删除菜单按钮 -->
+	<delete id="deleteObject">
+		delete from sys_menus where id=#{id}
+	</delete>
+	<select id="findZtreeNodes" resultType="node">
+		select id,name,parentId from sys_menus
+	</select>
+	<insert id="insertObject">
+		insert into sys_menus(name,url,type,sort,note,parentId,permission,createdTime,modifiedTime,createdUser,modifiedUser)
+		values
+		(#{name},#{url},#{type},#{sort},#{note},#{parentId},#{permission},now(),now(),#{createdUser},#{modifiedUser})
+	</insert>
+	<select id="findObjectById" resultType="map">
+		select m.*,p.name parentName from sys_menus m left join sys_menus p on m.parentId=p.id where m.id=#{id}
+	</select>
+	<update id="updateObject">
+		update sys_menus set
+		name=#{name},type=#{type},url=#{url},
+        sort=#{sort},parentId=#{parentId},
+        permission=#{permission}
+        where id=#{id}
+	</update>
 </mapper>

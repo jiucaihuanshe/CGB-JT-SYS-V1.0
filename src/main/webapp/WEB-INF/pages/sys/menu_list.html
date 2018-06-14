@@ -107,7 +107,59 @@
 	} ];
 	$(function() {
 		doGetObjects();
+		$(".input-group-btn").on("click",".btn-delete",doDeleteObject)
+		.on("click",".btn-add,.btn-update",doLoadEditPage);
 	});
+	//事件处理函数
+	function doLoadEditPage(){
+		var title;
+		if($(this).hasClass("btn-add")){
+			title="添加菜单";
+		}else if($(this).hasClass("btn-update")){
+			title="修改菜单";
+			var id = getSelectedId();
+			if(id==-1){
+				alert("请先选择");
+				return;
+			}
+			$(".container-fluid").data("id",id);
+		}
+		
+		var url = "menu/editUI.do";
+		$(".container-fluid").load(url,function(){
+			$(".box-title").html(title);
+		});
+	}
+	//删除菜单项
+	function doDeleteObject(){
+		//1.获取选中的menuId
+		var menuId=getSelectedId();
+		if(menuId==-1){
+			alert("请先选择");
+			return;
+		}
+		//2.执行post提交
+		var params={"menuId":menuId};
+		var url = "menu/doDeleteObject.do";
+		$.post(url,params,function(result){
+			if(result.state==1){
+				alert("删除成功！");
+				doGetObjects();
+			}else{
+				alert(result.message);
+			}
+		});
+	}
+	/*获得选中的id值*/
+	function getSelectedId() {
+		//1.1 获得选中的对象,默认返回值为一个对象数组
+		var selections = $("#menuTable").bootstrapTreeTable("getSelections");
+		if (selections.length == 0) {
+			return -1;//表示没选择任何对象
+		}
+		//1.2获得选中数组中下标为0的元素id的值
+		return selections[0].id;
+	}
 	function doGetObjects() {
 		var tableId = "menuTable";
 		var table = new TreeTable(tableId, "menu/doFindObjects.do", colunms);
